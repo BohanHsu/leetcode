@@ -29,6 +29,10 @@ describe 'largest_rectangle_area' do
   it 'should pass test 7' do
     largest_rectangle_area([2,1,2]).must_equal(3)
   end
+
+  it 'should pass test 8' do
+    largest_rectangle_area([2,0,1,0,1,0]).must_equal(2)
+  end
 end
 
 describe "min_index" do

@@ -43,8 +43,7 @@ def largest_rectangle_area(height)
   max = nil
   s = []
   s.push [0, height.length]
-  j = 0
-  while !s.empty? && j < 5 do
+  while !s.empty? do
     from = s.last[0]
     to = s.pop[1]
     middle = min_index(height, from, to)
@@ -58,7 +57,6 @@ def largest_rectangle_area(height)
     s.push [from, middle] if middle > from
     s.push [middle + 1, to] if to > middle + 1
     
-    j += 1
   end
   max
 end
