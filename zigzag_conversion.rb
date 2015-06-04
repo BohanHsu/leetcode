@@ -21,17 +21,23 @@ def convert(s, num_rows)
   i_last = s.length - 1
 end
 
-def calculate_char_num_in_line(num_rows)
+def calculate_char_num_in_line(length, num_rows)
   modulee = num_rows * 2 - 2
-  char_num_in_line = num_rows.times.each {nil}
-  num_rows.times.each do |offset|
+  char_num_in_line = num_rows.times.map {nil}
+  num_rows.times do |offset|
     if offset == 0
-      nums = i_last / modulee + 1
+      nums = length / modulee
+      nums += 1 if length % modulee != 0
+    elsif offset == num_rows - 1
+      nums = char_num_in_line[0]
+      nums +=1 if length % modulee >= num_rows
     else
-      nums = i_last / modulee - 2
-      nums += 1 if i_last % modulee >= offset
-      nums += 1 if i_last % modulee >= modulee - offset
+      nums = length / modulee * 2 - 2
+      p "length=#{length}, modulee=#{modulee}, nums=#{nums}"
+      nums += 1 if length % modulee >= offset || length % modulee == 0
+      nums += 1 if length % modulee >= modulee - offset || length % modulee == 0
     end
     char_num_in_line[offset] = nums
   end
+  char_num_in_line
 end
