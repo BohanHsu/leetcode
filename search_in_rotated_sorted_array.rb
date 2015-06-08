@@ -13,8 +13,53 @@
 def search(nums, target)
   from = 0
   to = nums.length - 1
+  i = (from + to) / 2
+  stack = []
 
+  stack.push [from, i]
+  stack.push [i, to]
 
+  while !stack.empty? do
+    from = stack.last[0]
+    to = stack.pop[1]
+    if from == to
+      if target == nums[from]
+        return from
+      end
+    end
+
+    if from == to - 1
+      if target == nums[from]
+        return from
+      elsif target == nums[to]
+        return to
+      elsif stack.empty?
+        return -1
+      elsif !stack.empty?
+        next
+      end
+    end
+
+    if sorted?(nums, from, to) 
+      if (nums[from] > target || nums[to] < target)
+        next
+      else
+        i = (from + to) / 2
+        if target == nums[i]
+          return i
+        elsif target < nums[i]
+          stack.push [from, i]
+        else
+          stack.push [i, to]
+        end
+      end
+    else
+      i = (from + to) / 2
+      stack.push [from, i]
+      stack.push [i, to]
+    end
+  end
+  -1
 end
 
 def sorted?(nums, from, to)
