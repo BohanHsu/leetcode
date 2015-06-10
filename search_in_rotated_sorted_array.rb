@@ -22,9 +22,14 @@ def search(nums, target)
   while !stack.empty? do
     from = stack.last[0]
     to = stack.pop[1]
+
     if from == to
-      if target == nums[from]
+      if target == nums[from] && !stack.empty?
         return from
+      elsif target != nums[from] && stack.empty?
+        return -1
+      else
+        next
       end
     end
 
