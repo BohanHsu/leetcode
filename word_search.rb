@@ -20,70 +20,59 @@
 # @return {Boolean}
 def exist(board, word)
   return true if word.length == 0
+  mask = board.map do |row|
+    row.map do
+      nil
+    end
+  end
 
   board.length.times do |i|
     board[i].length.times do |j|
       if board[i][j] == word[0]
-        parent = {}
+
+        mask.each do |row|
+          row.map! do
+            false
+          end
+        end
+
         stack = []
         stack.push [i, j, 0]
 
         while !stack.empty? do
           i = stack.last[0]
           j = stack.last[1]
-          k = stack.pop[2]
-          
+          k = stack.last[2]
           if k == word.length - 1
             return true
           end
+          if mask[i][j]
+            mask[i][j] = false
+            stack.pop
+            next
+          else
+            mask[i][j] = true
+          end
 
-          if in_board?(board, i-1, j) && board[i-1][j] == word[k+1] && !is_parent?(parent, i-1, j, i, j, k)
+          if in_board?(board, i-1, j) && board[i-1][j] == word[k+1] && !mask[i-1][j]
             stack.push [i-1, j, k+1]
-            parent = set_parent(parent, i, j, i-1, j, k+1)
           end
 
-          if in_board?(board, i+1, j) && board[i+1][j] == word[k+1] && !is_parent?(parent, i+1, j, i, j, k)
+          if in_board?(board, i+1, j) && board[i+1][j] == word[k+1] && !mask[i+1][j]
             stack.push [i+1, j, k+1]
-            parent = set_parent(parent, i, j, i+1, j, k+1)
           end
 
-          if in_board?(board, i, j-1) && board[i][j-1] == word[k+1] && !is_parent?(parent, i, j-1, i, j, k)
+          if in_board?(board, i, j-1) && board[i][j-1] == word[k+1] && !mask[i][j-1]
             stack.push [i, j-1, k+1]
-            parent = set_parent(parent, i, j, i, j-1, k+1)
           end
 
-          if in_board?(board, i, j+1) && board[i][j+1] == word[k+1] && !is_parent?(parent, i, j+1, i, j, k)
+          if in_board?(board, i, j+1) && board[i][j+1] == word[k+1] && !mask[i][j+1]
             stack.push [i, j+1, k+1]
-            parent = set_parent(parent, i, j, i, j+1, k+1)
           end
         end
       end
     end
   end
-  false
-end
-
-def set_parent(parent, pi, pj, ci, cj, ck)
-  parent[ci] = {} if parent[ci].nil?
-  parent[ci][cj] = {} if parent[ci][cj].nil?
-  parent[ci][cj][ck] = [pi, pj]
-  parent
-end
-
-def is_parent?(parent, pi, pj, ci, cj, ck)
-  i = ci
-  j = cj
-  k = ck
-  begin
-    return false if parent[i].nil?
-    return false if parent[i][j].nil?
-    return false if parent[i][j][k].nil?
-    p = parent[i][j][k]
-    i = p[0]
-    j = p[1]
-    k -= 1
-    return true if pi == i && pj == j
-  end while !p.nil?
   false
 end
 
