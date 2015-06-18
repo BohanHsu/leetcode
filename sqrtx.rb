@@ -4,8 +4,8 @@
 # @param {Integer} x
 # @return {Integer}
 def my_sqrt(x)
-  return 1 if x == 1
-  return 2 if x == 4
+  return 1 if x == 1 || x == 2 || x == 3
+  return 2 if x == 4 || x == 5
 
   to = x / 2
   from = 0
@@ -22,7 +22,6 @@ def my_sqrt(x)
     end
   end
 
-  return from if from * from == x
   return to if to * to == x
-  false
+  from
 end
