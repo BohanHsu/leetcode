@@ -5,6 +5,9 @@
 # @param {Character[][]} board
 # @return {Void} Do not return anything, modify board in-place instead.
 def solve_sudoku(board)
+  #board.map! do |row|
+  #  row.split //
+  #end
   q = Queue.new
   first_coord = next_coordinate(board, 0, -1)
   first_values = all_possible_value(board, first_coord.first, first_coord.last)
@@ -14,12 +17,11 @@ def solve_sudoku(board)
 
   until q.empty? do
     n = q.pop
+    byebug unless n[:board].length == 9
     coord = next_coordinate(n[:board], n[:i], n[:j])
-    p coord
-    return n[:board] if coord.nil?
+    return n[:board].map { |row| row.join "" } if coord.nil?
     i = coord.first
     j = coord.last
-    byebug if coord == [7,7]
 
     values = all_possible_value(n[:board], i, j)
     values.each do |val|
