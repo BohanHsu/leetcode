@@ -1,81 +1,36 @@
-### @param {Integer[]} height
-### @return {Integer}
-##def largest_rectangle_area(height)
-##  stack = []
-##  max = nil
-##
-##  height.each_with_index do |elem, i|
-##    if stack.empty? || elem >= height[stack.last]
-##      stack << i 
-##    else
-##      while !stack.empty? && height[stack.last] > elem do
-##        bgn = stack.pop
-##        local_max = (i - bgn) * height[bgn]
-##
-##        if max.nil?
-##          max = local_max
-##        else
-##          max = local_max if local_max > max
-##        end
-##      end
-##      stack << i
-##    end
-##  end
-##
-##  while !stack.empty? do
-##    bgn = stack.pop
-##    local_max = (height.length - bgn) * height[bgn]
-##
-##    if max.nil?
-##      max = local_max
-##    else
-##      max = local_max if local_max > max
-##    end
-##  end
-##
-##  max.nil? ? 0 : max
-##end
+# Given n non-negative integers representing the histogram's bar height where 
+# the width of each bar is 1, find the area of largest rectangle in the 
+# histogram.
 
 # @param {Integer[]} height
 # @return {Integer}
 def largest_rectangle_area(height)
-  return 0 if height.empty?
-  max = nil
-  s = []
-  s.push [0, height.length]
-  while !s.empty? do
-    from = s.last[0]
-    to = s.pop[1]
-    middle = min_index(height, from, to)
-    area = height[middle] * (to - from)
-    if max.nil?
-      max = area
+  stack = []
+  i = 0
+  max = 0
+
+  while i <= height.length do
+    if i < height.length
+      h = height[i]
     else
-      max = area if area > max
+      h = 0
     end
 
-    s.push [from, middle] if middle > from
-    s.push [middle + 1, to] if to > middle + 1
-    
-  end
-  max
-end
-
-def min_index(arr, from, to)
-  index = nil
-  min = nil
-  arr.each_with_index do |e, i|
-    if i >= from && i < to
-      if min.nil?
-        min = e
-        index = i
-      else
-        if e < min
-          min = e
-          index = i
+    if stack.empty? || height[stack.last] < h
+      stack << i
+    else
+      while !(stack.empty? || height[stack.last] < h) do
+        cur_height = height[stack.pop]
+        width = stack.empty? ? i : i - stack.last - 1
+        if max < cur_height * width
+          max = cur_height * width 
+          #p "stack=#{stack}, h=#{h}, i=#{i}, width=#{width}, heigth=#{cur_height}"
+          #p max
         end
       end
+      stack << i
     end
+    i += 1
   end
-  index
+  max
 end

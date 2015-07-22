@@ -34,9 +34,3 @@ describe 'largest_rectangle_area' do
     largest_rectangle_area([2,0,1,0,1,0]).must_equal(2)
   end
 end
-
-describe "min_index" do
-  it "should fml" do
-    min_index([2,1,2], 0, 3).must_equal(1)
-  end
-end
