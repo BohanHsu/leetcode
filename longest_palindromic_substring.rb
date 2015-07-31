@@ -6,41 +6,53 @@
 # @return {String}
 def longest_palindrome(s)
   str = s
-  j = s.length - 1
-  i = 0
-  s = []
-  pali = (j+1).times.map { (j+1).times.map {nil} }
+  arr = (s.length * 2 + 2).times.map { nil }
 
-  (0..j).each do |x|
-    (x..j).each do |y|
-      s.push [x, y]
-    end
+  arr[0] = '$'
+  arr[1] = '#'
+
+  s.length.times do |i|
+    arr[i * 2 + 2] = s[i]
+    arr[i * 2 + 3] = '#'
   end
 
-  max = 0
+  s = arr
+  p = s.map { 0 }
 
-  until s.empty? do
-    i = s[-1][0]
-    j = s[-1][1]
+  idx = 0
+  i = 1
+  max = -1
+  max_i = nil
 
-    if !pali[i][j].nil?
-      s.pop
-      next
-    end
-
-    if i == j
-      pali[i][j] = true    
-    elsif i + 1 == j
-      pali[i][j] = str[i] == str[j]
+  while i < s.length do
+    if idx + p[idx] > i
+      p[i] = [
+        p[2 * idx - i],
+        idx + p[idx] - i
+      ].min
     else
-      if pali[i+1][j-1].nil?
-        s.push [i+1, j-1]
-      else
-        pali[i][j] = str[i] == str[j] && pali[i+1][j-1]
-      end
+      p[i] = 0
     end
-    max = j - i + 1 if pali[i][j] && max < j - i + 1
-    s.pop unless pali[i][j].nil?
+
+    while s[i - p[i]] == s[i + p[i]] do
+      p[i] += 1
+    end
+
+    idx = i if i + p[i] > idx + p[idx]
+
+    if p[i] > max
+      max = p[i]
+      max_i = i
+    end
+
+    i += 1
   end
-  max
+
+  max -= 1
+
+  if max_i.odd?
+    return str[((max_i - 1) / 2 - (max / 2))...((max_i - 1) / 2 + (max / 2))]
+  else
+    return str[((max_i - 1) / 2 - (max / 2))..((max_i - 1) / 2 + (max / 2))]
+  end
 end
