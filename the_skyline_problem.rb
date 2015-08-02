@@ -13,6 +13,8 @@ def get_skyline(buildings)
 
   prev_height = 0
   cur_height = 0
+  pq = PriorityQueue.new buildings
+  pq << 0
 
   while !(i >= buildings.length) && k_idx < ks.length do
     k = ks[k_idx]
@@ -20,17 +22,19 @@ def get_skyline(buildings)
 
     while j + 1 < buildings.length && buildings[j+1][0] <= k && k < buildings[j+1][1] do
       j += 1
+      pq << j
     end
 
     while i < buildings.length && buildings[i][1] < k do
+      pq.delete i
       i += 1
     end
 
-    cur_height = buildings[i..j].select do |building|
-      building[0] <= k && k < building[1]
-    end.map do |building|
-      building[2]
-    end.max || 0
+    while !pq.empty? && !(buildings[pq.peek][0] <= k && k < buildings[pq.peek][1]) do
+      pq.pop
+    end
+
+    cur_height = pq.empty? ? 0 : buildings[pq.peek][2]
 
     #p "k=#{k}, i=#{i}, j=#{j}, cur_height=#{cur_height}, prev_height=#{prev_height}"
 
@@ -45,6 +49,7 @@ def get_skyline(buildings)
 end
 
 class PriorityQueue
+  attr_accessor :arr
   def initialize(buildings)
     @buildings = buildings
     @arr = []
@@ -52,8 +57,8 @@ class PriorityQueue
 
   def <<(e)
     @arr << e
-    @arr.sort do |a, b|
-      buildings[b][2] - buildings[a][2]
+    @arr.sort! do |a, b|
+      @buildings[b][2] - @buildings[a][2]
     end
   end
 
@@ -62,7 +67,18 @@ class PriorityQueue
   end
 
   def peek
-
+    @arr.first
   end
 
+  def pop
+    @arr.delete_at 0
+  end
+
+  def length
+    @arr.length
+  end
+
+  def empty?
+    @arr.empty?
+  end
 end

@@ -21,3 +21,25 @@ describe 'get_skyline(buildings)' do
   end
 
 end
+
+describe 'PriorityQueue' do 
+  before do
+    @buildings = [[2, 9, 10], [3, 7, 15], [5, 12, 12], [15, 20, 10], [19, 24, 8]]
+    @pq = PriorityQueue.new @buildings
+
+    @pq << 0
+    @pq << 3
+    @pq << 1
+    @pq << 4
+    @pq << 2
+  end
+
+  it 'should peek' do
+    @pq.peek.must_equal(1)
+  end
+
+  it 'should pop' do
+    @pq.pop.must_equal(1)
+    @pq.peek.must_equal(2)
+  end
+end
