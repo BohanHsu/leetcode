@@ -18,43 +18,23 @@
 # @return {Integer}
 def count_nodes(root)
   return 0 if root.nil?
-  stack = []
+  depth_left = 1
+  depth_right = 1
 
-  count = 0
-
-  stack << root
-
-  n = stack.last
+  n = root
   while n.left do
-    stack << n.left
-    n = stack.last
+    depth_left += 1
+    n = n.left
   end
 
-  depth = stack.size
-
-  while stack.size == depth do
-    count += 1
-
-    n = stack.pop
-
-    while !stack.empty? && n == stack.last.right do
-      n = stack.pop
-    end
-
-    break if stack.empty?
-
-    if stack.last.right
-      stack << stack.last.right
-
-      n = stack.last
-
-      while n.left do
-        stack << n.left
-        n = stack.last
-      end
-    end
+  while n.right do
+    depth_right += 1
+    n = n.right
   end
 
-  sum = 0
-  2 ** (depth - 1) + count - 1
+  if depth_left == depth_right
+    return 2 ** depth_left - 1
+  else
+    return count_nodes(root.left) + count_nodes(root.right) + 1
+  end
 end
