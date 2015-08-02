@@ -19,7 +19,6 @@ describe 'get_skyline(buildings)' do
     expected_result = [[0,2147483647], [2147483647,0]]
     get_skyline(buildings).must_equal(expected_result)
   end
-
 end
 
 describe 'PriorityQueue' do 
@@ -36,10 +35,21 @@ describe 'PriorityQueue' do
 
   it 'should peek' do
     @pq.peek.must_equal(1)
+    @pq.delete 1
+    @pq.peek.must_equal(2)
   end
 
   it 'should pop' do
     @pq.pop.must_equal(1)
     @pq.peek.must_equal(2)
+  end
+
+  it 'should delete' do
+    @pq.delete 2
+    @pq.delete 3
+    @pq.pop.must_equal(1)
+    @pq.pop.must_equal(0)
+    @pq.pop.must_equal(4)
+    @pq.peek.must_equal(nil)
   end
 end
