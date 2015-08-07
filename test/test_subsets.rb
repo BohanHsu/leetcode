@@ -22,4 +22,13 @@ describe 'subsets' do
   it 'should pass test 2' do
     nums = []
   end
+
+  it 'should sort???' do
+    nums = [4,1,0]
+    expected_result = [[],[4],[1],[1,4],[0],[0,4],[0,1],[0,1,4]]
+    result = subsets(nums)
+    result.must_equal(expected_result)
+  end
+
+
 end
