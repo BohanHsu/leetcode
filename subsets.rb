@@ -29,7 +29,7 @@ def subsets(nums)
   results = indices.map do |ind_row|
     ind_row.map do |i|
       nums[i-1]
-    end
+    end.sort
   end
   results << []
 end
